@@ -1,23 +1,20 @@
-package com.gmendezm.tec.poo;
+package Models.Asignaturas;
+
+import Models.Carreras.Carrera;
 
 /**
  *
  * @author gmendezmOsa
  */
-public class Asignatura {
-    
-    
+public abstract class Asignatura {  
     private String nombre;
     private int creditos;
 
-    
     public Asignatura(String nombre, int creditos) {
         this.nombre = nombre;
         this.creditos = creditos;
     }
     
-    
-
     public String getNombre() {
         return nombre;
     }
@@ -33,7 +30,4 @@ public class Asignatura {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
-    
-
 }

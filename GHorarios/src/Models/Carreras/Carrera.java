@@ -1,13 +1,13 @@
-package com.gmendezm.tec.poo;
+package Models.Carreras;
 
 /**
  *
  * @author gmendezmOsa
  */
-public class Departamento {
+public class Carrera {
     private String nombre;
 
-    public Departamento(String nombre) {
+    public Carrera(String nombre) {
         this.nombre = nombre;
     }
 

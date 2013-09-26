@@ -1,4 +1,4 @@
-package com.gmendezm.tec.poo;
+package Models.Asignaturas;
 
 /**
  *
