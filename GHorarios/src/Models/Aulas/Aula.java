@@ -1,9 +1,5 @@
 package Models.Aulas;
 
-/**
- *
- * @author gmendezmOsa
- */
 public  abstract class Aula  {
 
     private String nombre;

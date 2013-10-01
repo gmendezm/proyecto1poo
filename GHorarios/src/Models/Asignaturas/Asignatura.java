@@ -2,10 +2,6 @@ package Models.Asignaturas;
 
 import Models.Carreras.Carrera;
 
-/**
- *
- * @author gmendezmOsa
- */
 public abstract class Asignatura {  
     private String nombre;
     private int creditos;

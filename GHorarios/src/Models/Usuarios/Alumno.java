@@ -6,17 +6,13 @@ package Models.Usuarios;
 
 import Models.Carreras.Carrera;
 
-/**
- *
- * @author Estudiante
- */
-public class Alumno extends Usuario{
+public class Alumno extends Usuario implements I_Usuario{
     private String Carnet;
     private Matricula matricula;    
     private Carrera Carrera;
 
-    public Alumno(String Carnet, int ID, String Nombre, String Apellidos) {
-        super(ID, Nombre, Apellidos);
+    public Alumno(String Carnet, String Usuario, String Contraseña) {
+        super(Usuario, Contraseña);
         this.Carnet = Carnet;
     }
 
@@ -43,5 +39,7 @@ public class Alumno extends Usuario{
     public void setCarrera(Carrera Carrera) {
         this.Carrera = Carrera;
     }
+    
+    
     
 }
