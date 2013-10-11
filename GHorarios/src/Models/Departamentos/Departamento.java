@@ -1,23 +1,21 @@
 package Models.Departamentos;
 
-/**
- *
- * @author gmendezmOsa
- */
+
 public class Departamento {
+    private String ID;
     private String nombre;
 
-    public Departamento(String nombre) {
+    public Departamento(String ID, String nombre) {
+        this.ID = ID;
         this.nombre = nombre;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getID() {
+        return ID;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    
+
+
+
     
 }

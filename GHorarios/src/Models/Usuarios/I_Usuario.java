@@ -9,6 +9,8 @@ package Models.Usuarios;
  * @author Soporte
  */
 public interface I_Usuario {
+    
     public boolean Login(String user,String pasw);
+    
     
 }

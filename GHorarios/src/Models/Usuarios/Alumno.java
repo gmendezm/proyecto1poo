@@ -11,35 +11,16 @@ public class Alumno extends Usuario implements I_Usuario{
     private Matricula matricula;    
     private Carrera Carrera;
 
-    public Alumno(String Carnet, String Usuario, String Contraseña) {
-        super(Usuario, Contraseña);
+    public Alumno(String Nombre,String Carnet, String Usuario, String Contraseña) {
+        super(Nombre,Usuario, Contraseña);
         this.Carnet = Carnet;
     }
 
     public String getCarnet() {
         return Carnet;
-    }
-
-    public void setCarnet(String Carnet) {
-        this.Carnet = Carnet;
-    }
-
-    public Matricula getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(Matricula matricula) {
-        this.matricula = matricula;
-    }
-
-    public Carrera getCarrera() {
-        return Carrera;
-    }
-
-    public void setCarrera(Carrera Carrera) {
-        this.Carrera = Carrera;
-    }
+    } 
     
-    
-    
+    public String getPerfil(){
+        return "Carnet :"+this.Carnet +"\n Nombre :"+getNombre();
+    } 
 }

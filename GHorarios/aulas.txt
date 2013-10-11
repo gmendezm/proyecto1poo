@@ -1,0 +1,2 @@
+T,Administracion, 5, Segundi Piso CyL,28,true,true
+P,Laimi, 0, Costado Soda,30,Lenovo i5 Monitor 22 ,24

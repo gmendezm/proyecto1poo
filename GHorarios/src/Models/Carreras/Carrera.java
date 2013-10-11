@@ -1,23 +1,13 @@
 package Models.Carreras;
 
-/**
- *
- * @author gmendezmOsa
- */
+
 public class Carrera {
+    private String ID;
     private String nombre;
 
-    public Carrera(String nombre) {
+    public Carrera(String ID, String nombre) {
+        this.ID = ID;
         this.nombre = nombre;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    
-    
 }

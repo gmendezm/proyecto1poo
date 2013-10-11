@@ -1,0 +1,2 @@
+ECyl,Escula de ciencias y letras
+EC,Escuela de Computacion

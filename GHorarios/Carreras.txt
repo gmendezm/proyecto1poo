@@ -1,0 +1,2 @@
+IC,Ing Computacion
+AE,Administracion de Empresas

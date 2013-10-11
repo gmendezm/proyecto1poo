@@ -1,24 +1,12 @@
 package Models.Asignaturas;
 
-/**
- *
- * @author gmendezmOsa
- */
-public class Teorica extends Asignatura{
+public class Teorica extends Asignatura implements I_Asignatura{
     private String apuntes;
 
-    public Teorica(String apuntes, String nombre, int creditos) {
-        super(nombre, creditos);
-        this.apuntes = apuntes;
+    public Teorica(String ID, String Nombre, int creditos) {
+        super(ID, Nombre, creditos);
     }
 
-    public String getApuntes() {
-        return apuntes;
-    }
 
-    public void setApuntes(String apuntes) {
-        this.apuntes = apuntes;
-    }
-    
     
 }

@@ -3,27 +3,17 @@ package Models.Asignaturas;
 import Models.Carreras.Carrera;
 
 public abstract class Asignatura {  
-    private String nombre;
-    private int creditos;
+    private String ID;
+    private String Nombre;
+    private int Creditos=0;
 
-    public Asignatura(String nombre, int creditos) {
-        this.nombre = nombre;
-        this.creditos = creditos;
+    public Asignatura(String ID, String Nombre,int creditos) {
+        this.ID = ID;
+        this.Nombre = Nombre;
+        this.Creditos=creditos;
     }
+
     
-    public String getNombre() {
-        return nombre;
-    }
+    
 
-    public int getCreditos() {
-        return creditos;
-    }
-
-    public void setCreditos(int creditos) {
-        this.creditos = creditos;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 }
