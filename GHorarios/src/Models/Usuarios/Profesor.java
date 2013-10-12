@@ -1,8 +1,6 @@
 package Models.Usuarios;
 
-import Models.Asignaturas.Matricula;
 import Models.Departamentos.Departamento;
-import Models.Asignaturas.Horario;
 
 public class Profesor extends Usuario  implements I_Usuario{
     private String cedula;

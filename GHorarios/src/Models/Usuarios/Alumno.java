@@ -4,8 +4,6 @@
  */
 package Models.Usuarios;
 
-import Models.Asignaturas.Matricula;
-import Models.Asignaturas.Semestre;
 import Models.Carreras.Carrera;
 import java.util.ArrayList;
 

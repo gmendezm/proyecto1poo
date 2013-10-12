@@ -4,21 +4,20 @@
  */
 package Models.Usuarios;
 
-import Models.Asignaturas.I_Asignatura;
-import Models.Asignaturas.Matricula;
+import Models.Asignaturas.Cursos;
 import Models.Asignaturas.Semestre;
 import java.util.ArrayList;
 
 public class AlumnoMatricula {
     private Semestre _Semestre;
-    private ArrayList<Matricula> Matricula;
+    private ArrayList<Cursos> Matricula;
 
     public AlumnoMatricula(Semestre _Semestre) {
         this._Semestre = _Semestre;
-        this.Matricula = new ArrayList<Matricula>();
+        this.Matricula = new ArrayList<Cursos>();
     }
 
-    public void setMatricula(Matricula _Matricula) {
+    public void setMatricula(Cursos _Matricula) {
         this.Matricula.add(_Matricula);
     }
     

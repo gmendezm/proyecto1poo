@@ -1,9 +1,9 @@
 package Controllers;
 
 import Models.Asignaturas.Asignatura;
+import Models.Asignaturas.Cursos;
 import Models.Asignaturas.Horario;
 import Models.Asignaturas.I_Asignatura;
-import Models.Asignaturas.Matricula;
 import Models.Asignaturas.Practica;
 import Models.Asignaturas.Semestre;
 import Models.Asignaturas.Teorica;
@@ -17,6 +17,7 @@ import Models.Usuarios.Alumno;
 import Models.Usuarios.AlumnoMatricula;
 import Models.Usuarios.I_Usuario;
 import Models.Usuarios.Profesor;
+import java.awt.Cursor;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -228,8 +229,8 @@ public class Principal {
                                 if (Usuarios.get(z) instanceof Profesor) {
                                     Profesor P = (Profesor) Usuarios.get(z);
                                     if (P.getCedula().equals(info[3])) {
-                                        Matricula nn = new Matricula(Asignaturas.get(y), Usuarios.get(z), Integer.parseInt(info[4]));
-                                        Semestres.get(x).insertarCurso(nn);
+                                        Cursos nn = new Cursos(Asignaturas.get(y), Usuarios.get(z), Integer.parseInt(info[4]));
+                                        Semestres.get(x).setCursos(nn);
                                     }
                                 }
                             }
@@ -249,10 +250,10 @@ public class Principal {
                         for (int x = 0; x < Semestres.size(); x++) {
                             if ((Semestres.get(x).getSemestre() == Integer.parseInt(info[1]))
                                     && (Semestres.get(x).getAño() == Integer.parseInt(info[2]))){
-                                for (int y = 0; y < Semestres.get(x).getMatricula().size(); y++) {
-                                    if (Semestres.get(x).getMatricula().get(y).getAsignatura().getID().equals(info[3])) {
+                                for (int y = 0; y < Semestres.get(x).getCursos().size(); y++) {
+                                    if (Semestres.get(x).getCursos().get(y).getAsignatura().getID().equals(info[3])) {
                                         AlumnoMatricula nn= new AlumnoMatricula(Semestres.get(x));
-                                        nn.setMatricula(Semestres.get(x).getMatricula().get(y));
+                                        nn.setMatricula(Semestres.get(x).getCursos().get(y));
                                         A.setMatricula(nn);
                                     }
                                 }
@@ -263,7 +264,6 @@ public class Principal {
           }
        }
     }
-
     
     /**
      * @param user
