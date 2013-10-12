@@ -1,2 +1,3 @@
-Daniel Murillo,200854763,osa,123
-Estudiante,2009,User,456
+Daniel Murillo,200854763,osa,123,IC
+Estudiante,2009,User,456,AE
+Geovanny Mendez Marin, 201014364, gmendezm, gmendezm, IC

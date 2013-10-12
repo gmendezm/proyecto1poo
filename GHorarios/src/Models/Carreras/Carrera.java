@@ -10,4 +10,9 @@ public class Carrera {
         this.nombre = nombre;
     }
 
+    public String getID() {
+        return ID;
+    }
+
+    
 }

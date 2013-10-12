@@ -1,6 +1,7 @@
 package Models.Asignaturas;
 
 import Models.Aulas.Aula;
+import Models.Aulas.I_Aula;
 
 /**
  *
@@ -10,14 +11,14 @@ public class Horario {
     
     private int dia;
     private int hora;
-    private Asignatura asignatura;
-    private Aula aula;
+    private I_Aula aula;
 
-    public Horario(int dia, int hora, Asignatura asignatura, Aula aula) {
+    public Horario(int dia, int hora, I_Aula aula) {
         this.dia = dia;
         this.hora = hora;
-        this.asignatura = asignatura;
         this.aula = aula;
     }
+    
+
 
 }

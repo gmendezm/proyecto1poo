@@ -1,5 +1,6 @@
 package Models.Usuarios;
 
+import Models.Asignaturas.Matricula;
 import Models.Departamentos.Departamento;
 import Models.Asignaturas.Horario;
 
