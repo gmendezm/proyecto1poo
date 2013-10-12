@@ -30,4 +30,9 @@ public class Semestre {
         return Año;
     }
 
+    public ArrayList<Matricula> getMatricula() {
+        return Matricula;
+    }
+    
+    
 }

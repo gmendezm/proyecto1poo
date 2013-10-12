@@ -14,6 +14,7 @@ import Models.Aulas.Teoria;
 import Models.Carreras.Carrera;
 import Models.Departamentos.Departamento;
 import Models.Usuarios.Alumno;
+import Models.Usuarios.AlumnoMatricula;
 import Models.Usuarios.I_Usuario;
 import Models.Usuarios.Profesor;
 import java.io.BufferedReader;
@@ -40,12 +41,6 @@ public class Principal {
     private String[] toADD(String data) {
         return data.split(",");
     }
-
-    public static ArrayList<I_Asignatura> getAsignaturas() {
-        return Asignaturas;
-    }
-
-    
     
     /**
      * @param thisfile
@@ -105,6 +100,9 @@ public class Principal {
         }
         if (T.equals("M")) {
             add_Semestres_MAtricula(info);
+        }
+       if (T.equals("AM")) {
+            add_AlumnoMatricula(info);
         }
     }
 
@@ -190,7 +188,6 @@ public class Principal {
             Carreras.add(nn);
         }
     }
-
     /**
      * @param info
      */
@@ -231,7 +228,7 @@ public class Principal {
                                 if (Usuarios.get(z) instanceof Profesor) {
                                     Profesor P = (Profesor) Usuarios.get(z);
                                     if (P.getCedula().equals(info[3])) {
-                                        Matricula nn = new Matricula(Asignaturas.get(y), Usuarios.get(z), Integer.parseInt(info[4]), null);
+                                        Matricula nn = new Matricula(Asignaturas.get(y), Usuarios.get(z), Integer.parseInt(info[4]));
                                         Semestres.get(x).insertarCurso(nn);
                                     }
                                 }
@@ -243,6 +240,31 @@ public class Principal {
         }
     }
 
+    private void add_AlumnoMatricula(String[] info) {
+       if (info.length == 4) {
+          for (int i = 0; i < Usuarios.size(); i++) {
+                if (Usuarios.get(i) instanceof Alumno) {
+                    Alumno A = (Alumno) Usuarios.get(i);
+                    if(A.getCarnet().equals(info[0])){
+                        for (int x = 0; x < Semestres.size(); x++) {
+                            if ((Semestres.get(x).getSemestre() == Integer.parseInt(info[1]))
+                                    && (Semestres.get(x).getAño() == Integer.parseInt(info[2]))){
+                                for (int y = 0; y < Semestres.get(x).getMatricula().size(); y++) {
+                                    if (Semestres.get(x).getMatricula().get(y).getAsignatura().getID().equals(info[3])) {
+                                        AlumnoMatricula nn= new AlumnoMatricula(Semestres.get(x));
+                                        nn.setMatricula(Semestres.get(x).getMatricula().get(y));
+                                        A.setMatricula(nn);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+          }
+       }
+    }
+
+    
     /**
      * @param user
      * @param pasw
@@ -295,75 +317,71 @@ public class Principal {
         this.Aulas = new ArrayList<I_Aula>();
         this.Carreras = new ArrayList<Carrera>();
         this.Semestres = new ArrayList<Semestre>();
-        //Read_File("Alumnos.txt", "E");
-        // Read_File("Profesores.txt", "P");
-
-        // Primero se agrega un departamento, al que se asocian los profesores
-        String[] d1 = {"EC", "Escuela de Computacion"};
-        add_Departamentos(d1);
-
-        // Debe existir una carrera, a la que se asocian los alumnos
-        String[] c1 = {"IC", "Ingenieria en Computacion"};
-        add_Carreras(c1);
-
-        // Luego deben ser inscritos los estudiantes
-        String[] u1 = {"Daniel Murillo", "200854763", "osa", "123", "IC"};
-        String[] u2 = {"Geovanny Mendez Marin", "201014364", "gmendezm", "gmendezm", "IC"};
-        add_Usuarios(u1, "E");
-        add_Usuarios(u2, "E");
-
-        // Son inscritos los profesores
-        String[] p1 = {"Oscar Viquez", "1050", "osviquez", "789", "EC"};
-        add_Usuarios(p1, "P");
-
-        // Se agregan las aulas
-        String[] a1 = {"T", "Administracion", "5", "Segundo Piso CyL", "28", "true", "true"};
-        String[] a2 = {"P", "Laimi", "0", "Costado Soda", "30", "Lenovo i5 Monitor 22 ", "24"};
-
-        add_Aulas(a1, "T");
-        add_Aulas(a2, "P");
-
-        // Se agregan las materias
-        String[] m1 = {"P", "IC-2020", "POO", "3", "3"};
-        String[] m2 = {"T", "MA-1414", "Calculo", "4", "2"};
-
-        add_Asignaturas(m1, "P"); // Practica
-        add_Asignaturas(m2, "T"); // Teorica
-
-        // Se agregan los semestres
+        Read_File("Carreras.txt", "O");   
+        Read_File("Departamentos.txt", "D");   
+        Read_File("Alumnos.txt", "E");
+        Read_File("Profesores.txt", "P");             
+        Read_File("aulas.txt", "A");
+        Read_File("Asignaturas.txt", "C");
+        Read_File("Departamento-Asignatura.txt", "DA");        
         add_Semestres();
-       
-        // Se agrega ese semestre al primer estudiante de la lista
-        ((Alumno)this.Usuarios.get(0)).agregarSemestre(this.Semestres.get(0));
-        
-        // Se crea un horario
-        Horario h = new Horario( 1, 7, this.Aulas.get(0));
-        
-        // Se agrega una matricula para una asignatura y un usuario especifico
-        Matricula mat1 = new Matricula(this.Asignaturas.get(0), this.Usuarios.get(2),50, h);
-        
+        Read_File("matricula.txt", "M");
+        Read_File("AlumnoMatricula.txt", "AM");
+        //this.mostrarUsuarios();
          
-        // Se obtiene el semestre del estudiante y se le agrega a ese semestre, la matricula
-        ((Alumno)this.Usuarios.get(0)).getSemestre(1, 2013).insertarCurso(mat1);
-               
-       // sem1.insertarCurso(null);
-             
+
+//        // Primero se agrega un departamento, al que se asocian los profesores
+//        String[] d1 = {"EC", "Escuela de Computacion"};
+//        add_Departamentos(d1);
+//
+//        // Debe existir una carrera, a la que se asocian los alumnos
+//        String[] c1 = {"IC", "Ingenieria en Computacion"};
+//        add_Carreras(c1);
+//
+//        // Luego deben ser inscritos los estudiantes
+//        String[] u1 = {"Daniel Murillo", "200854763", "osa", "123", "IC"};
+//        String[] u2 = {"Geovanny Mendez Marin", "201014364", "gmendezm", "gmendezm", "IC"};
+//        add_Usuarios(u1, "E");
+//        add_Usuarios(u2, "E");
+//
+//        // Son inscritos los profesores
+//        String[] p1 = {"Oscar Viquez", "1050", "osviquez", "789", "EC"};
+//        add_Usuarios(p1, "P");
+//
+//        // Se agregan las aulas
+//        String[] a1 = {"T", "Administracion", "5", "Segundo Piso CyL", "28", "true", "true"};
+//        String[] a2 = {"P", "Laimi", "0", "Costado Soda", "30", "Lenovo i5 Monitor 22 ", "24"};
+//
+//        add_Aulas(a1, "T");
+//        add_Aulas(a2, "P");
+//
+//        // Se agregan las materias
+//        String[] m1 = {"P", "IC-2020", "POO", "3", "3"};
+//        String[] m2 = {"T", "MA-1414", "Calculo", "4", "2"};
+//
+//        add_Asignaturas(m1, "P"); // Practica
+//        add_Asignaturas(m2, "T"); // Teorica
+//
+//        // Se agregan los semestres
+//        add_Semestres();
+//       
+//        // Se agrega ese semestre al primer estudiante de la lista
+//        ((Alumno)this.Usuarios.get(0)).agregarSemestre(this.Semestres.get(0));
+//        
+//        // Se crea un horario
+//        Horario h = new Horario( 1, 7, this.Aulas.get(0));
+//        
+//        // Se agrega una matricula para una asignatura y un usuario especifico
+//        Matricula mat1 = new Matricula(this.Asignaturas.get(0), this.Usuarios.get(2),50, h);
+//         
+//        // Se obtiene el semestre del estudiante y se le agrega a ese semestre, la matricula
+//        ((Alumno)this.Usuarios.get(0)).getSemestre(1, 2013).insertarCurso(mat1);
+//               
+//       // sem1.insertarCurso(null);
+//             
         this.mostrarUsuarios();
-        /*
+//        /*
        
-      
-         //this.add_Usuarios();
-         Read_File("Departamentos.txt", "D");
-         Read_File("Carreras.txt", "O");
-        
-        
-         Read_File("aulas.txt", "A");
-         Read_File("Asignaturas.txt", "C");
-         Read_File("Departamento-Asignatura.txt", "DA");
-         add_Semestres();
-         Read_File("matricula.txt", "M");
-         //this.mostrarUsuarios();
-         * */
     }
 
     private void mostrarUsuarios() {

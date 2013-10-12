@@ -5,6 +5,7 @@
 package Views;
 
 import Controllers.Principal;
+import javax.swing.JList;
 
 /**
  *
@@ -19,7 +20,6 @@ public class GHorario extends javax.swing.JFrame {
      */
     public GHorario() {
         initComponents();
-        //jListAsignaturas = new JList()
     }
 
     /**
