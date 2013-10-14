@@ -29,6 +29,10 @@ public class Alumno extends Usuario implements I_Usuario{
     public void setMatricula(AlumnoMatricula nn) {
         this._Matricula.add(nn);
     }
+
+    public ArrayList<AlumnoMatricula> getMatricula() {
+        return _Matricula;
+    }
     
     
     public String getPerfil(){

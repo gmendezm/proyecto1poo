@@ -10,6 +10,7 @@ import Models.Asignaturas.Horario;
 import Models.Asignaturas.Practica;
 import Models.Aulas.Laboratorio;
 import Models.Aulas.Teoria;
+import Models.Usuarios.Alumno;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -449,7 +450,7 @@ public class GHorario extends javax.swing.JFrame {
             }
         }
         
-    private void get_asignaturas(int S,int A){
+    private void get_asignaturas_Profesor(int S,int A){
         list2.clear();
             for (int x = 0; x < Instancia.Semestres.size(); x++) {
                    if ((Instancia.Semestres.get(x).getSemestre() == S)
@@ -464,6 +465,64 @@ public class GHorario extends javax.swing.JFrame {
                    }
             }
     }
+    
+    private void get_Horario_Alumno(int S,int _Año){
+        list1.clear();
+        for(int u=0;u<Instancia.Usuarios.size();u++ ){
+            if(Instancia.Usuarios.get(u) instanceof Alumno){
+                Alumno A = (Alumno) Instancia.Usuarios.get(u);
+                if(A.getCarnet().equals(UserID)){
+                   for(int m=0;m< A.getMatricula().size();m++){
+                       if((A.getMatricula().get(m).getSemestre().getSemestre()==S)&&
+                               (A.getMatricula().get(m).getSemestre().getAño()==_Año)){
+                           for(int h=0;h<A.getMatricula().get(m).getSemestre().getHorario().size();h++){
+                               if(A.getMatricula().get(m).getSemestre().getHorario().get(h).getCurso()!=null){
+                                    if(A.getMatricula().get(m).Existe(
+                                            A.getMatricula().get(m).getSemestre().getHorario().get(h).getCurso().getAsignatura().getID())
+                                            ){                                   
+                                        list1.add(A.getMatricula().get(m).getSemestre().getHorario().get(h).getCurso().getAsignatura().GetPerfil()
+                                             +"..."+A.getMatricula().get(m).getSemestre().getHorario().get(h).getHoraFecha_Inicio().get(Calendar.HOUR_OF_DAY)
+                                                +":"+A.getMatricula().get(m).getSemestre().getHorario().get(h).getHoraFecha_Inicio().get(Calendar.MINUTE)
+                                             +"-"+A.getMatricula().get(m).getSemestre().getHorario().get(h).getHoraFecha_Final().get(Calendar.HOUR_OF_DAY)
+                                                +":"+A.getMatricula().get(m).getSemestre().getHorario().get(h).getHoraFecha_Final().get(Calendar.MINUTE)
+                                             +"..."+A.getMatricula().get(m).getSemestre().getHorario().get(h).getAula().getNombre()
+                                                +"-"+A.getMatricula().get(m).getSemestre().getHorario().get(h).getAula().getNumero()
+                                             );
+                                     jComboBox1.setSelectedIndex(S-1);
+                                     jComboBox3.setSelectedItem(String.valueOf(A));
+                                    }
+                               }
+                           }
+                       }
+                   }
+                }
+            }
+        }
+    }
+    
+        private void get_asignaturas_Alumno(int S,int _Año){
+            list2.clear();
+            for(int u=0;u<Instancia.Usuarios.size();u++ ){
+                if(Instancia.Usuarios.get(u) instanceof Alumno){
+                    Alumno A = (Alumno) Instancia.Usuarios.get(u);
+                    if(A.getCarnet().equals(UserID)){
+                       for(int m=0;m< A.getMatricula().size();m++){
+                           if((A.getMatricula().get(m).getSemestre().getSemestre()==S)&&
+                                   (A.getMatricula().get(m).getSemestre().getAño()==_Año)){
+                               for(int c=0;c<A.getMatricula().get(m).getAMatricula().size();c++){
+                                   list2.add(A.getMatricula().get(m).getAMatricula().get(c).getAsignatura().GetPerfil());
+                                   jComboBox4.setSelectedIndex(S-1);
+                                   jComboBox5.setSelectedItem(String.valueOf(A));
+
+                               }
+                           }
+                       }
+                    }
+                }
+            }
+        }
+
+    
     
     private void get_Aulas(String T){
         list3.clear();
@@ -498,9 +557,27 @@ public class GHorario extends javax.swing.JFrame {
             else{
                 S=1;
             }
-            get_asignaturas(S,localCalendar.get(Calendar.YEAR));
+           get_asignaturas_Profesor(S,localCalendar.get(Calendar.YEAR));
+           get_Horario_profesor(S,localCalendar.get(Calendar.YEAR));            
     }
     
+     private void Alumnos(){
+            //Optener las asignaturas e un profesor para el semenestre en transcurso
+         jTabbedPane1.setSelectedIndex(1);
+         jTabbedPane1.setEnabledAt(0, false);
+         jTabbedPane1.setEnabledAt(1, true);
+            Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
+            int S=1;
+            if((localCalendar.get(Calendar.MONTH) + 1)> 5){
+                S=2;
+            }
+            else{
+                S=1;
+            }     
+           get_asignaturas_Alumno(S,localCalendar.get(Calendar.YEAR));
+           get_Horario_Alumno(S,localCalendar.get(Calendar.YEAR));     
+    }
+     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String info[]=Instancia.Login(jTextField1.getText(),jPasswordField1.getText());
@@ -509,6 +586,7 @@ public class GHorario extends javax.swing.JFrame {
             jTextArea1.setText(Instancia.Perfil(UserID));
             get_Aulas("T");
             if(info[1].equals("A")){
+                Alumnos();
                 }
             else{
                 Profesores();
@@ -524,7 +602,7 @@ public class GHorario extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-        get_asignaturas((jComboBox4.getSelectedIndex()+1),Integer.parseInt(jComboBox5.getSelectedItem().toString()));
+        get_asignaturas_Alumno((jComboBox4.getSelectedIndex()+1),Integer.parseInt(jComboBox5.getSelectedItem().toString()));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
@@ -539,7 +617,8 @@ public class GHorario extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        get_Horario_profesor((jComboBox4.getSelectedIndex()+1),Integer.parseInt(jComboBox3.getSelectedItem().toString())); 
+        //get_Horario_profesor((jComboBox4.getSelectedIndex()+1),Integer.parseInt(jComboBox3.getSelectedItem().toString())); 
+        get_Horario_Alumno(Integer.parseInt(jComboBox1.getSelectedItem().toString()),Integer.parseInt(jComboBox3.getSelectedItem().toString())); 
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
