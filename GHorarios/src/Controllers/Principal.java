@@ -1,13 +1,11 @@
 package Controllers;
 
-import Models.Asignaturas.Asignatura;
 import Models.Asignaturas.Cursos;
 import Models.Asignaturas.Horario;
 import Models.Asignaturas.I_Asignatura;
 import Models.Asignaturas.Practica;
 import Models.Asignaturas.Semestre;
 import Models.Asignaturas.Teorica;
-import Models.Aulas.Aula;
 import Models.Aulas.I_Aula;
 import Models.Aulas.Laboratorio;
 import Models.Aulas.Teoria;
@@ -17,23 +15,24 @@ import Models.Usuarios.Alumno;
 import Models.Usuarios.AlumnoMatricula;
 import Models.Usuarios.I_Usuario;
 import Models.Usuarios.Profesor;
-import java.awt.Cursor;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Principal {
 
-    private static ArrayList<I_Usuario> Usuarios;
-    private static ArrayList<I_Aula> Aulas;
+    public static ArrayList<I_Usuario> Usuarios;
+    public static ArrayList<I_Aula> Aulas;
     private static ArrayList<Departamento> Departamentos;
     private static ArrayList<I_Asignatura> Asignaturas;
     private static ArrayList<Carrera> Carreras;
-    private static ArrayList<Semestre> Semestres;
-    File archivo = null;
-    FileReader fr = null;
-    BufferedReader br = null;
+    public static ArrayList<Semestre> Semestres;
+    
+    private File archivo = null;
+    private FileReader fr = null;
+    private BufferedReader br = null;
 
     /**
      * @param data
@@ -206,6 +205,7 @@ public class Principal {
         }
     }
 
+    
     private void add_Semestres() {
         Semestre n1 = new Semestre(1, 2013);
         Semestre n2 = new Semestre(2, 2013);
@@ -229,7 +229,7 @@ public class Principal {
                                 if (Usuarios.get(z) instanceof Profesor) {
                                     Profesor P = (Profesor) Usuarios.get(z);
                                     if (P.getCedula().equals(info[3])) {
-                                        Cursos nn = new Cursos(Asignaturas.get(y), Usuarios.get(z), Integer.parseInt(info[4]));
+                                        Cursos nn = new Cursos(Asignaturas.get(y), P, Integer.parseInt(info[4]));
                                         Semestres.get(x).setCursos(nn);
                                     }
                                 }
@@ -241,6 +241,9 @@ public class Principal {
         }
     }
 
+        /**
+     * @param info
+     */
     private void add_AlumnoMatricula(String[] info) {
        if (info.length == 4) {
           for (int i = 0; i < Usuarios.size(); i++) {
@@ -269,17 +272,19 @@ public class Principal {
      * @param user
      * @param pasw
      */
-    public String Login(String user, String pasw) {
-        String result = "-1";
+    public String[] Login(String user, String pasw) {
+        String[] result ={"-1","-1"};
         for (int i = 0; i < Usuarios.size(); i++) {
             if (Usuarios.get(i).Login(user, pasw)) {
                 if (Usuarios.get(i) instanceof Alumno) {
                     Alumno na = (Alumno) Usuarios.get(i);
-                    result = na.getCarnet();
+                    result[0] = na.getCarnet();
+                    result[1]="A";
                 }
                 if (Usuarios.get(i) instanceof Profesor) {
                     Profesor np = (Profesor) Usuarios.get(i);
-                    result = np.getCedula();
+                    result[0] = np.getCedula();
+                    result[1]="P";
                 }
             }
         }
@@ -307,10 +312,95 @@ public class Principal {
         }
         return result;
     }
+       
+    
+    /* 1.semestre     
+     * 2.Aula
+     * 3.Curso
+     * 4.Crear nuevo Horario
+     * 5. Horario -> Semetre
+     */
+    
+    public void GenerarHorario(int S,int _año){
+        for(int x=0;x<Semestres.size();x++){
+            if((Semestres.get(x).getSemestre()==S)&&(Semestres.get(x).getAño()==_año)){
+                if(Semestres.get(x).getSizeHorario()==0){ // tiene horario?
+                    for(int y=0;y<Aulas.size();y++){
+                        
+                        if(Aulas.get(y).getHoraFecha().get(Calendar.DAY_OF_MONTH)<=5){ // dias de semana                           
+                            if(Aulas.get(y).getHoraFecha().get(Calendar.HOUR_OF_DAY)<=16){          //horas del dia        
+                                
+                                if((Aulas.get(y) instanceof Teoria)&&((Semestres.get(x).getCurso("T")!=null))){
+                                    Horario NH= new Horario(Aulas.get(y).getHoraFecha(),Semestres.get(x).getCurso("T"),Aulas.get(y)); //nuevo horario
+                                    if(NH.getHoraFecha_Final().get(Calendar.HOUR_OF_DAY)>15){                       //Hora maxima
+                                        Calendar HI=NH.getHoraFecha_Inicio();                     
+                                        int Min=Semestres.get(x).getCurso("T").getMinAsignados();
+                                        while((Semestres.get(x).getCurso("T").getMinAsignados()>=Min)&&(HI.get(Calendar.HOUR_OF_DAY)<16)){
+                                            HI.add(Calendar.MINUTE, 50);
+                                            Min+=50;
+                                        }
+                                        if(Min>0){
+                                            Calendar HF=NH.getHoraFecha_Inicio();
+                                            HF.add(Calendar.MINUTE, Min);                                    
+                                            NH.setHoraFecha_Final(HF);
+                                            Semestres.get(x).getCurso("T").setMinAsignados(Min);                                      
 
+                                            Semestres.get(x).setHorario(NH);
+                                            Aulas.get(y).setHoraFecha_MHD(1,7,0);
+                                            Horario recreo= new Horario(Aulas.get(y).getHoraFecha(), null, null);
+                                            Semestres.get(x).setHorario(recreo);
+                                        }
+                                    }
+                                    else{ // horario sin problemas
+                                        Aulas.get(y).setHoraFecha(NH.getHoraFecha_Final());
+                                        Semestres.get(x).setHorario(NH);
+                                        Horario recreo= new Horario(Aulas.get(y).getHoraFecha(), null, null);
+                                        Semestres.get(x).setHorario(recreo);
+                                    }
+                                }
+                                if((Aulas.get(y) instanceof Laboratorio)&&((Semestres.get(x).getCurso("P")!=null))){
+                                    Horario NH= new Horario(Aulas.get(y).getHoraFecha(),Semestres.get(x).getCurso("P"),Aulas.get(y)); //nuevo horario
+                                    if(NH.getHoraFecha_Final().get(Calendar.HOUR_OF_DAY)>15){                       //Hora maxima
+                                        Calendar HI=NH.getHoraFecha_Inicio();                     
+                                        int Min=Semestres.get(x).getCurso("P").getMinAsignados();
+                                        while((Semestres.get(x).getCurso("P").getMinAsignados()>=Min)&&(HI.get(Calendar.HOUR_OF_DAY)<16)){
+                                            HI.add(Calendar.MINUTE, 50);
+                                            Min+=50;
+                                        }
+                                        if(Min>0){
+                                            Calendar HF=NH.getHoraFecha_Inicio();
+                                            HF.add(Calendar.MINUTE, Min);                                    
+                                            NH.setHoraFecha_Final(HF);
+                                            Semestres.get(x).getCurso("P").setMinAsignados(Min);                                      
+
+                                            Semestres.get(x).setHorario(NH);
+                                            Aulas.get(y).setHoraFecha_MHD(1,7,0);
+                                            Horario recreo= new Horario(Aulas.get(y).getHoraFecha(), null, null);
+                                            Semestres.get(x).setHorario(recreo);
+                                        }
+                                    }
+                                    else{ // horario sin problemas
+                                        Aulas.get(y).setHoraFecha(NH.getHoraFecha_Final());
+                                        Semestres.get(x).setHorario(NH);
+                                        Horario recreo= new Horario(Aulas.get(y).getHoraFecha(), null, null);
+                                        Semestres.get(x).setHorario(recreo);
+                                    }
+                                }
+                            }
+                            else{
+                                Aulas.get(y).setHoraFecha_MHD(1,7,0);
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+    
     public Principal() {
 
-        // Son inicializadas todas las listas con  las que va a trabajar el sistema
+        // Son inicializadas todas las listas con  las que va a trabajar el sistema        
         this.Usuarios = new ArrayList<I_Usuario>();
         this.Departamentos = new ArrayList<Departamento>();
         this.Asignaturas = new ArrayList<I_Asignatura>();
@@ -327,58 +417,7 @@ public class Principal {
         add_Semestres();
         Read_File("matricula.txt", "M");
         Read_File("AlumnoMatricula.txt", "AM");
-        //this.mostrarUsuarios();
-         
-
-//        // Primero se agrega un departamento, al que se asocian los profesores
-//        String[] d1 = {"EC", "Escuela de Computacion"};
-//        add_Departamentos(d1);
-//
-//        // Debe existir una carrera, a la que se asocian los alumnos
-//        String[] c1 = {"IC", "Ingenieria en Computacion"};
-//        add_Carreras(c1);
-//
-//        // Luego deben ser inscritos los estudiantes
-//        String[] u1 = {"Daniel Murillo", "200854763", "osa", "123", "IC"};
-//        String[] u2 = {"Geovanny Mendez Marin", "201014364", "gmendezm", "gmendezm", "IC"};
-//        add_Usuarios(u1, "E");
-//        add_Usuarios(u2, "E");
-//
-//        // Son inscritos los profesores
-//        String[] p1 = {"Oscar Viquez", "1050", "osviquez", "789", "EC"};
-//        add_Usuarios(p1, "P");
-//
-//        // Se agregan las aulas
-//        String[] a1 = {"T", "Administracion", "5", "Segundo Piso CyL", "28", "true", "true"};
-//        String[] a2 = {"P", "Laimi", "0", "Costado Soda", "30", "Lenovo i5 Monitor 22 ", "24"};
-//
-//        add_Aulas(a1, "T");
-//        add_Aulas(a2, "P");
-//
-//        // Se agregan las materias
-//        String[] m1 = {"P", "IC-2020", "POO", "3", "3"};
-//        String[] m2 = {"T", "MA-1414", "Calculo", "4", "2"};
-//
-//        add_Asignaturas(m1, "P"); // Practica
-//        add_Asignaturas(m2, "T"); // Teorica
-//
-//        // Se agregan los semestres
-//        add_Semestres();
-//       
-//        // Se agrega ese semestre al primer estudiante de la lista
-//        ((Alumno)this.Usuarios.get(0)).agregarSemestre(this.Semestres.get(0));
-//        
-//        // Se crea un horario
-//        Horario h = new Horario( 1, 7, this.Aulas.get(0));
-//        
-//        // Se agrega una matricula para una asignatura y un usuario especifico
-//        Matricula mat1 = new Matricula(this.Asignaturas.get(0), this.Usuarios.get(2),50, h);
-//         
-//        // Se obtiene el semestre del estudiante y se le agrega a ese semestre, la matricula
-//        ((Alumno)this.Usuarios.get(0)).getSemestre(1, 2013).insertarCurso(mat1);
-//               
-//       // sem1.insertarCurso(null);
-//             
+        
         this.mostrarUsuarios();
 //        /*
        

@@ -1,10 +1,7 @@
 package Models.Asignaturas;
 
-/**
- *
- * @author gmendezmOsa
- */
-public class Practica extends Asignatura implements I_Asignatura{
+
+public class Practica extends Asignatura{
 
     private String material;
     private String SO;

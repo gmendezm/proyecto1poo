@@ -6,5 +6,7 @@ package Models.Asignaturas;
 
 public interface I_Asignatura {
     public String getID();
+    public int getCreditos();
+    public String GetPerfil();
     
 }
