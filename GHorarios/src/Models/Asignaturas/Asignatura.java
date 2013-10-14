@@ -3,7 +3,7 @@ package Models.Asignaturas;
 import Models.Carreras.Carrera;
 import java.util.Calendar;
 
-public abstract class Asignatura implements I_Asignatura{  
+public abstract class Asignatura {
     private String ID;
     private String Nombre;
     private int Creditos=0;
@@ -24,10 +24,23 @@ public abstract class Asignatura implements I_Asignatura{
     public int getCreditos() {
         return Creditos;
     }
+
+    public void setNombre(String Nombre) {
+        this.Nombre = Nombre;
+    }
+
+    public void setCreditos(int Creditos) {
+        this.Creditos = Creditos;
+    }
+
+    public String getNombre() {
+        return Nombre;
+    }
+    
     
    
     public String GetPerfil(){
-        return this.ID+"..."+this.Nombre+"..."+ Integer.toString(this.Creditos);
+        return this.ID+"_.."+this.Nombre+"..."+ Integer.toString(this.Creditos);
     }
 
 

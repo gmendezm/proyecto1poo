@@ -26,7 +26,7 @@ public class Principal {
     public static ArrayList<I_Usuario> Usuarios;
     public static ArrayList<I_Aula> Aulas;
     private static ArrayList<Departamento> Departamentos;
-    private static ArrayList<I_Asignatura> Asignaturas;
+    public static ArrayList<I_Asignatura> Asignaturas;
     private static ArrayList<Carrera> Carreras;
     public static ArrayList<Semestre> Semestres;
     
@@ -38,7 +38,7 @@ public class Principal {
      * @param data
      *
      */
-    private String[] toADD(String data) {
+    private  String[] toADD(String data) {
         return data.split(",");
     }
     
@@ -191,7 +191,7 @@ public class Principal {
     /**
      * @param info
      */
-    private void add_Departamento_Asignatura(String[] info) {
+    private static void add_Departamento_Asignatura(String[] info) {
         if (info.length == 2) {
             for (int i = 0; i < Departamentos.size(); i++) {
                 if (Departamentos.get(i).getID().equals(info[0])) {
@@ -218,7 +218,7 @@ public class Principal {
     /**
      * @param info
      */
-    private void add_Semestres_MAtricula(String[] info) {
+    private static void add_Semestres_MAtricula(String[] info) {
         if (info.length == 5) {
             for (int x = 0; x < Semestres.size(); x++) {
                 if ((Semestres.get(x).getSemestre() == Integer.parseInt(info[0]))
@@ -244,7 +244,7 @@ public class Principal {
         /**
      * @param info
      */
-    private void add_AlumnoMatricula(String[] info) {
+    private static void add_AlumnoMatricula(String[] info) {
        if (info.length == 4) {
           for (int i = 0; i < Usuarios.size(); i++) {
                 if (Usuarios.get(i) instanceof Alumno) {
@@ -399,7 +399,6 @@ public class Principal {
     }
     
     public Principal() {
-
         // Son inicializadas todas las listas con  las que va a trabajar el sistema        
         this.Usuarios = new ArrayList<I_Usuario>();
         this.Departamentos = new ArrayList<Departamento>();
@@ -418,22 +417,8 @@ public class Principal {
         Read_File("matricula.txt", "M");
         Read_File("AlumnoMatricula.txt", "AM");
         
-        this.mostrarUsuarios();
-//        /*
+        //this.mostrarUsuarios();
        
     }
 
-    private void mostrarUsuarios() {
-
-        for (int i = 0; i < Usuarios.size(); i++) {
-
-            if (Usuarios.get(i) instanceof Alumno) {
-                Alumno x = (Alumno) Usuarios.get(i);
-                System.out.println(x.getCarnet());
-            } else if (Usuarios.get(i) instanceof Profesor) {
-                Profesor x = (Profesor) Usuarios.get(i);
-                System.out.println(x.getCedula());
-            }
-        }
-    }
 }
